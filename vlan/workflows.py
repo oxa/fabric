@@ -7,12 +7,12 @@ from openstack_dashboard.dashboards.fabric.vlan import utils
 
 class SetVlanDetailsAction(workflows.Action):
 
-    id = forms.IntegerField(
-        label=_("ID"),
+    id = forms.CharField(
+        label=_("IDs"),
         required=True,
-        min_value=1,
-        max_value=4096,
-        help_text=_("Vlan ID"))
+        max_length=80,
+        help_text=_("Enter the range of VLAN IDs. (e.g. '2009-2019','2009','2009,2010-2019'"))
+
 
 
     name = forms.CharField(

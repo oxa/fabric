@@ -39,10 +39,9 @@ def addVlan(self, request, context):
 
         handle = UcsHandle()
         handle.Login("10.60.6.5","admin","C1sco123")
-
         obj = handle.GetManagedObject(None, None, {"Dn":"fabric/lan"})
         handle.AddManagedObject(obj,"fabricVlan",{"Sharing":"none", "Dn":"fabric/lan/net-"+name+id+"", "Id":""+id+"", "CompressionType":"included", "DefaultNet":"no", "McastPolicyName":"", "PubNwName":"", "Name":""+name+id+"", "PolicyOwner":"local"})
-        print("Vlan "+name+id+" created.")
+
 
     except:
         print "Exception inside utils.addVlan"

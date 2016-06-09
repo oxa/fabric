@@ -7,16 +7,14 @@ from openstack_dashboard.dashboards.fabric.vlan import utils
 
 class SetAddVlanDetailsAction(workflows.Action):
 
-    id = forms.IntegerField(
-        label=_("ID"),
+    id = forms.CharField(
+        label=_("IDs"),
         required=True,
-        min_value=1,
-        max_value=4096,
-        help_text=_("Vlan ID"))
-
+        max_length=80,
+        help_text=_("Enter the range of VLAN IDs. (e.g. '2009-2019','2009','2009,2010-2019'"))
 
     name = forms.CharField(
-        label=_("Name"),
+        label=_("Names"),
         required=True,
         max_length=80,
         help_text=_("VLAN Name"))
@@ -33,7 +31,7 @@ class SetAddVlanDetailsAction(workflows.Action):
     def __init__(self, request, context, *args, **kwargs):
         self.request = request
         self.context = context
-        super(SetVlanDetailsAction, self).__init__(
+        super(SetAddVlanDetailsAction, self).__init__(
             request, context, *args, **kwargs)
 
 class SetAddVlanDetails(workflows.Step):
