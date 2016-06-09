@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Vlan" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Vlan") %}
+{% endblock page_header %}
+
+{% block main %}
+{{ vlan_table.render }}
+
+{% endblock %}
+
+
