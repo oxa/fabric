@@ -12,6 +12,7 @@ def getVlanname(id):
     handle = UcsHandle()
     handle.Login("10.60.6.5","admin","C1sco123")
     vlans = handle.GetManagedObject(None, "fabricVlan")
+    vlanname=None
     for vlandata in vlans:
         if vlandata.Id == str(id):
             vlanname=vlandata.Name
@@ -33,14 +34,26 @@ def addVlan(self, request, context):
     try:
         name = context.get('name')
         id = context.get('id')
-
         name = str(name)
+
         id = str(id)
+        splitdata=id.split(",")
+
+        single_vlan = r"^[0-9]*$"
+        range_vlan= r"^[0-9]{1,4}[-][0-9]{1,4}$"
 
         handle = UcsHandle()
         handle.Login("10.60.6.5","admin","C1sco123")
         obj = handle.GetManagedObject(None, None, {"Dn":"fabric/lan"})
-        handle.AddManagedObject(obj,"fabricVlan",{"Sharing":"none", "Dn":"fabric/lan/net-"+name+id+"", "Id":""+id+"", "CompressionType":"included", "DefaultNet":"no", "McastPolicyName":"", "PubNwName":"", "Name":""+name+id+"", "PolicyOwner":"local"})
+
+        for chunk in splitdata:
+            if re.search(single_vlan, chunk) is not None:
+                handle.AddManagedObject(obj,"fabricVlan",{"Sharing":"none", "Dn":"fabric/lan/net-"+name+chunk+"", "Id":""+chunk+"", "CompressionType":"included", "DefaultNet":"no", "McastPolicyName":"", "PubNwName":"", "Name":""+name+chunk+"", "PolicyOwner":"local"})
+            if re.search(range_vlan, chunk) is not None:
+                stri=chunk.split("-")
+                if stri[0] < stri[1] :
+                    for ids in range (int(stri[0]), int(stri[1])+1):
+                        handle.AddManagedObject(obj,"fabricVlan",{"Sharing":"none", "Dn":"fabric/lan/net-"+name+str(ids)+"", "Id":""+str(ids)+"", "CompressionType":"included", "DefaultNet":"no", "McastPolicyName":"", "PubNwName":"", "Name":""+name+str(ids)+"", "PolicyOwner":"local"})
 
 
     except:
